@@ -1,0 +1,29 @@
+{
+  "name": "shuttle-cli",
+  "version": "1.0.0",
+  "description": "Command Line Interface for the OSX Shuttle App written in node.js",
+  "main": "app.js",
+  "dependencies": {
+    "node-osascript": "^1.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jachwe/shuttle-cli.git"
+  },
+  "keywords": [
+    "osx",
+    "ssh",
+    "shuttle",
+    "node.js"
+  ],
+  "author": "Jewe Pasch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jachwe/shuttle-cli/issues"
+  },
+  "homepage": "https://github.com/jachwe/shuttle-cli#readme"
+}
