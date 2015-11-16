@@ -11,3 +11,4 @@ Work is in Progress.
 
 - Parse Options (e.g. Default Terminal, Theme, etc... )
 - Do not use AppleScript
+- Add options to add/remove/edit entries from commandline
