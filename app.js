@@ -1,44 +1,44 @@
-var fs = require('fs');
-var util = require('util');
-var osascript = require('node-osascript');
-var path = process.env['HOME'] + '/.shuttle.json';
-var json = JSON.parse(fs.readFileSync(path, 'utf8'));
+var fs = require('fs'),
+    util = require('util'),
+    osascript = require('node-osascript'),
+    colors = require('colors'),
+    args = process.argv.slice(2),
 
-var opts = [];
-var id = 0;
+    path = process.env['HOME'] + '/.shuttle.json',
+    json = JSON.parse(fs.readFileSync(path, 'utf8')),
 
+    printList = args.length == 0,
 
-printRecursive = function(base, lvl, print) {
+    gather = function(root, lvl, opts) {
+        for (var i = 0; i < root.length; i++) {
+            var obj = root[i],
+                keys = Object.keys(obj);
 
-    if (util.isArray(base)) {
-        for (var i = 0; i < base.length; i++) {
-            printRecursive(base[i], lvl + 1, print);
-        }
-    } else if (util.isObject(base)) {
-        var keys = Object.keys(base);
-        for (var x = 0; x < keys.length; x++) {
-            var key = keys[x];
-            if (util.isArray(base[key])) {
-            	console.log( Array(lvl).join(' ') + key );
-                printRecursive(base[key], lvl + 1, print);
-            } else {
-            	console.log( Array(lvl).join(' ') + (id++) + ': ' + base.name );
-            	opts.push(base);
-            	return;
+            if (!util.isNullOrUndefined(obj['name']) && !util.isNullOrUndefined(obj['cmd'])) {
+                if (printList) {
+                    console.log( colors.bold.blue( Array(lvl + 1).join(' ') + opts.length ) + ": " + colors.bold(obj['name']));
+                }
+                opts.push(obj);
+                continue;
             }
+
+            for (var x = 0; x < keys.length; x++) {
+                var key = keys[x],
+                    entry = obj[key];
+
+                if (util.isArray(entry)) {
+                    if (printList) {
+                        console.log( colors.bold.green( Array(lvl+1).join(' ') + key));
+                    }
+                    gather(entry, lvl + 1, opts);
+                }
+
+            }
+
         }
-    }
-
-}
-
-var args = process.argv.slice(2);
-var print = false;
-
-if (args.length == 0) {
-    print = true;
-}
-
-printRecursive(json.hosts, 0, print);
+        return opts;
+    },
+    opts = gather(json.hosts, 0, []);
 
 
 for (i = 0; i < args.length; i++) {
@@ -53,3 +53,4 @@ for (i = 0; i < args.length; i++) {
         }
     }
 }
+
